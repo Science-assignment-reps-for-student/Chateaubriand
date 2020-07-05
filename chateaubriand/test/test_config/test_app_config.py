@@ -1,6 +1,6 @@
 import os
 
-from chateaubriand.test import BaseTestCase
+from test import BaseTestCase
 
 
 class AppConfigTestCase(BaseTestCase):

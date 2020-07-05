@@ -1,6 +1,6 @@
 import unittest
 
-from chateaubriand.app import create_app
+from app import create_app
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
