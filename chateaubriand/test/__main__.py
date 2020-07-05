@@ -2,8 +2,8 @@ import unittest
 
 from types import FunctionType
 
-from test.test_config import AppConfigTestCase
-from test.test_apis import Api1TestCase
+from chateaubriand.test.test_config import AppConfigTestCase
+from chateaubriand.test.test_apis import Api1TestCase
 
 def get_test_key(module):
     keys = []
