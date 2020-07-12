@@ -3,7 +3,12 @@ import unittest
 from types import FunctionType
 
 from test.test_config import AppConfigTestCase
-from test.test_apis import Api1TestCase
+from test.test_apis import (
+    PersonalAssignmentTestCase,
+    TeamAssignmentTestCase,
+    ExperimentAssignmentTestCase
+)
+
 
 def get_test_key(module):
     keys = []
@@ -24,7 +29,10 @@ def create_test_suite(modules):
 
 if __name__ == "__main__":
     test_suite = create_test_suite([
-        AppConfigTestCase
+        AppConfigTestCase,
+        PersonalAssignmentTestCase,
+        TeamAssignmentTestCase,
+        ExperimentAssignmentTestCase
     ])
     runner = unittest.TextTestRunner()
     runner.run(test_suite)
