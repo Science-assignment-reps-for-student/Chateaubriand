@@ -1,5 +1,6 @@
 from flask import Flask
 
+from chateaubriand.app import extensions
 from chateaubriand.app.hooks.after_request import after_request
 
 
@@ -12,7 +13,9 @@ def register_controllers(app: Flask):
 
 
 def register_extensions(app: Flask):
-    pass
+    extensions.cors.init_app(app)
+    extensions.db.init_app(app)
+    extensions.jwt.init_app(app)
 
 
 def create_app(*config_cls) -> Flask:
