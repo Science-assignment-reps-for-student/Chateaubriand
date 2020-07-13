@@ -2,7 +2,11 @@ import os
 
 
 def build_database_uri(username, password, host):
-    return "mysql://" + username + ":" + password + "@" + host
+    try:
+        database_uri = "mysql://" + username + ":" + password + "@" + host
+    except:
+        database_uri = ""
+    return database_uri
 
 
 class LocalDBConfig:
