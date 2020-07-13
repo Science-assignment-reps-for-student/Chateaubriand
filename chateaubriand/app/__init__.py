@@ -1,8 +1,10 @@
 from flask import Flask
 
+from chateaubriand.app.hooks.after_request import after_request
+
 
 def register_hooks(app: Flask)
-    pass
+    app.after_request(after_request)
 
 
 def register_controllers(app: Flask):
