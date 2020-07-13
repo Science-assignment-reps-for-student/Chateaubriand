@@ -7,6 +7,6 @@ WORKDIR .
 RUN pip install -r requirements
 
 ENTRYPOINT ["python"]
-CMD ["-m","tenderloin"]
+CMD ["-m","chateaubriand"]
 
 EXPOSE 5000
