@@ -1,0 +1,57 @@
+name: CI 
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      TEST_DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
+      TEST_DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+      TEST_DATABASE_HOST: ${{ secrets.TEST_DATABASE_HOST}}
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Test
+        run: |
+          cd chateaubriand
+          python -m test
+          
+  DOCKER_BUILD_PUSH:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST}}
+      
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: build docker image
+        run: docker build -t chateaubriand
+      
+      - name: publish
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: chateaubriand
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+     
