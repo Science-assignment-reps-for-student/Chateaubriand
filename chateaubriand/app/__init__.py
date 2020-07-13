@@ -4,7 +4,7 @@ from chateaubriand.app import extensions
 from chateaubriand.app.hooks.after_request import after_request
 
 
-def register_hooks(app: Flask)
+def register_hooks(app: Flask):
     app.after_request(after_request)
 
 
@@ -19,10 +19,10 @@ def register_extensions(app: Flask):
 
 
 def create_app(*config_cls) -> Flask:
-    app = Flask()
+    app = Flask(__name__)
 
     for config in config_cls:
-        flask_app.config.from_object(config)
+        app.config.from_object(config)
     
     register_hooks(app)
     register_controllers(app)
