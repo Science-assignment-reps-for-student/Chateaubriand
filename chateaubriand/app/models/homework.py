@@ -11,5 +11,5 @@ class HomeworkModel(db.Model):
     deadline_4 = db.Column(db.DateTime, nullable=False)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    type = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Enum("SINGLE", "MULTI", "EXPERIMENT"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
