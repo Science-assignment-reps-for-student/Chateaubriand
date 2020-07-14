@@ -1,3 +1,6 @@
+from flask import request
+from functools import wraps
+
 from chateaubriand.app.exception import BadRequest
 
 
