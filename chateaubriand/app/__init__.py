@@ -1,6 +1,7 @@
 from flask import Flask
 
 from chateaubriand.app import extensions
+from chateaubriand.app.controllers.admin import admin_blueprint
 from chateaubriand.app.hooks.after_request import after_request
 
 
@@ -9,7 +10,7 @@ def register_hooks(app: Flask):
 
 
 def register_controllers(app: Flask):
-    pass
+    app.register_blueprint(admin_blueprint)
 
 
 def register_extensions(app: Flask):
