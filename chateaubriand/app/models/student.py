@@ -9,3 +9,5 @@ class StudentModel(db.Model):
     password = db.Column(db.String, nullable=False)
     student_number = db.Column(db.String(4), nullable=False, unique=True)
     name = db.Column(db.String, nullable=False)
+
+    single_files = db.relationship("SingleFileModel")
