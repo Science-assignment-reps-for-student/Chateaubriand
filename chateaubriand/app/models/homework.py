@@ -13,3 +13,5 @@ class HomeworkModel(db.Model):
     description = db.Column(db.String)
     type = db.Column(db.Enum("SINGLE", "MULTI", "EXPERIMENT"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
+
+    single_files = db.relationship("SingleFileModel")
