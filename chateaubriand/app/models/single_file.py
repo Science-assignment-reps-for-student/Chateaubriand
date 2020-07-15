@@ -12,3 +12,5 @@ class SingleFileModel(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     is_late = db.Column(db.Boolean, nullable=False)
 
+    homeworks = db.relationship("HomeworkModel")
+    students = db.relationship("StudentModel")
