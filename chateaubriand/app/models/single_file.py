@@ -13,4 +13,4 @@ class SingleFileModel(db.Model):
     is_late = db.Column(db.Boolean, nullable=False)
 
     homeworks = db.relationship("HomeworkModel")
-    students = db.relationship("StudentModel")
+    student = db.relationship("StudentModel")

@@ -12,7 +12,7 @@ class PersonalAssignmentView(BaseView):
 
     def is_submit(self, assignment, student_number):
         for single_file in assignment.single_files:
-            if single_file.students.student_number == student_number:
+            if single_file.student.student_number == student_number:
                 if single_file.is_late == 1: return 2
                 else: return 1
         return 0
