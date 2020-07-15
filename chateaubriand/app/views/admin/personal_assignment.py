@@ -10,6 +10,13 @@ class PersonalAssignmentView(BaseView):
     def __init__(self, class_):
         self.class_ = class_
 
+    def is_submit(self, assignment, student_number):
+        for single_file in assignment.single_files:
+            if single_file.students.student_number == student_number:
+                if single_file.is_late == 1: return 2
+                else: return 1
+        return 0
+
     def deadline(self, assignment):
         if self.class_ == 1:
             return assignment.deadline_1
@@ -25,34 +32,35 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self.class_)
 
-        queried_data = HomeworkModel.query\
+        exist_data = HomeworkModel.query\
             .join(SingleFileModel)\
             .join(StudentModel)\
             .filter(StudentModel.student_number.like(student_number_like))\
             .filter(HomeworkModel.type == "SINGLE")\
             .all()
 
-        return queried_data
-        #
-        # for i in queried_data:
-        #     print(i, i.single_files, i.single_files[0].students)
+        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
+
+        return exist_data, students
 
     def data_merge(self):
         queried_data = self.query_to_db()
+        exist_data = queried_data[0]
+        students = queried_data[1]
+
         assignments = []
 
-        for assignment in queried_data:
+        for assignment in exist_data:
             class_submit = []
 
-            for single_file in assignment.single_files:
+            for student in students:
                 class_submit.append(
                     {
-                        "name": single_file.students.name,
-                        "student_id": single_file.students.id,
-                        "submit": 1
+                        "name": student.name,
+                        "student_number": student.student_number,
+                        "submit": self.is_submit(assignment, student.student_number)
                     }
                 )
-
 
             assignments.append(
                 {
@@ -65,35 +73,10 @@ class PersonalAssignmentView(BaseView):
                 }
             )
 
-
         return {
-            "personal_assignment":
+            "personal_assignment": assignments
         }
 
 
     def get_view(self):
-        self.query_to_db()
-        return None
-        # return {
-        #     "personal_assignment": [
-        #         {
-        #             "id": 1,
-        #           "title": "정우영의 전구공장",
-        #           "description": "description of homework",
-        #           "created_at": time.mktime(personal_homework.created_at.timetuple()),
-        #             "deadline": time.mktime(),
-        #             "class_submit": [
-        #                 {
-        #                     "name": "오준상",
-        #                     "student_id": "1101",
-        #                     "submit": 0
-        #                 },
-        #                 {
-        #                     "name": "김어진",
-        #                     "student_id": "1102",
-        #                     "submit": 1
-        #                 }
-        #             ]
-        #         }
-        #     ]
-        # }
+        return self.data_merge()
