@@ -8,4 +8,4 @@ from chateaubriand.config.db_config import LocalDBConfig
 
 if __name__ == "__main__":
     app = create_app(DevLevelAppConfig, LocalDBConfig)
-    serve(app, **RUN_SETTINGS)
+    app.run()

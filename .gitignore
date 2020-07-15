@@ -1,3 +1,9 @@
+# Charm
+.idea/
+
+# vscode
+.vscode/
+
 # log
 logs/
 
