@@ -5,18 +5,36 @@ from test.test_apis.mocks import jwt_mock
 
 
 class TokenTestCase(BaseTestCase):
-    def test_post(self):
-        path = "/admin/token"
-        admin_token = jwt_mock(self.app, "ADMIN")
+    def __init__(self):
+        self.path = "/admin/token"
+        self.common_data_post = {
+            "access_token": jwt_mock(self.app, "ADMIN", "access_token"),
+            "refresh_token": jwt_mock(self.app, "ADMIN", "refresh_token")
+        }
 
+        self.invalid_data_post = {
+            "access_token": 1
+        }
+
+        self.un_match_token_post = {
+            "access_token": jwt_mock(self.app, "ADMIN", "access_token"),
+            "refresh_token": jwt_mock(self.app, "ADMIN", "access_token", invalid=True)
+        }
+
+    def test_post(self):
         resp_200 = self.test_client.post(
-            path, json={"access_token": admin_token, "refresh_token": admin_token}
+            self.path,
+            json = self.common_data_post
         )
 
-        resp_400 = self.test_client.post(path, json={"a": 123})
+        resp_400 = self.test_client.post(
+            self.path,
+            json = self.invalid_data_post
+        )
 
         resp_403 = self.test_client.post(
-            path, json={"access_token": admin_token, "refresh_token": admin_token}
+            self.path,
+            json = self.un_match_token_post
         )
 
         self.assertEqual(resp_200.status_code, 200)
