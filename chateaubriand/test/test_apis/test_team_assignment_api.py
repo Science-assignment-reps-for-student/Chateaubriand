@@ -6,20 +6,25 @@ from test.test_apis.mocks import jwt_mock
 
 class TeamAssignmentTestCase(BaseTestCase):
     def test_get(self):
-        token = jwt_mock(self.app)
+        admin_token = jwt_mock(self.app, "ADMIN")
         path = "/team-assignment"
 
-        resp_200 = self.test_client.get(path, 
-        json = {"class": 1}, 
-        headers={"authorization": token})
+        resp_200 = self.test_client.get(path,
+            json={"class": 1},
+            headers={"authorization": "Bearer" + admin_token})
 
-        resp_401 = self.test_client.get(path, 
-        json = {"class": 1})
+        resp_400 = self.test_client.get(path,
+            json={"class": "1"},
+            headers={"authorization": "Bearer" + admin_token})
 
-        resp_406 = self.test_client.get(path, 
-        json = {"class": "1"}, 
-        headers={"authorization": token})
+        resp_401 = self.test_client.get(path,
+            json={"class": 1})
+
+        resp_403 = self.test_client.get(path,
+            json={"class": 1},
+            headers={"authorization": "Bearer" + jwt_mock(self.app, "STUDENT")})
 
         self.assertEqual(resp_200.status_code, 200)
+        self.assertEqual(resp_400.status_code, 400)
         self.assertEqual(resp_401.status_code, 401)
-        self.assertEqual(resp_406.status_code, 406)
+        self.assertEqual(resp_403.status_code, 403)
