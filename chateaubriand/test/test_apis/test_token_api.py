@@ -7,12 +7,12 @@ from test.test_apis.mocks import jwt_mock
 class TokenTestCase(BaseTestCase):
     def __init__(self):
         self.path = "/admin/token"
-        self.common_data_post = {
+        self.common_post = {
             "access_token": jwt_mock(self.app, "ADMIN", "access_token"),
             "refresh_token": jwt_mock(self.app, "ADMIN", "refresh_token")
         }
 
-        self.invalid_data_post = {
+        self.invalid_post = {
             "access_token": 1
         }
 
@@ -24,12 +24,12 @@ class TokenTestCase(BaseTestCase):
     def test_post(self):
         resp_200 = self.test_client.post(
             self.path,
-            json = self.common_data_post
+            json = self.common_post
         )
 
         resp_400 = self.test_client.post(
             self.path,
-            json = self.invalid_data_post
+            json = self.invalid_post
         )
 
         resp_403 = self.test_client.post(
