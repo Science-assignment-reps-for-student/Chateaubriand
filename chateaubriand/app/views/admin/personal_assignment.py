@@ -2,9 +2,8 @@ import time
 
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import(
- HomeworkModel, StudentModel, SingleFileModel
-)
+from chateaubriand.app.models import HomeworkModel, StudentModel, SingleFileModel
+
 
 class PersonalAssignmentView(BaseView):
     def __init__(self, class_):
@@ -13,8 +12,10 @@ class PersonalAssignmentView(BaseView):
     def is_submit(self, assignment, student_number):
         for single_file in assignment.single_files:
             if single_file.student.student_number == student_number:
-                if single_file.is_late == 1: return 2
-                else: return 1
+                if single_file.is_late == 1:
+                    return 2
+                else:
+                    return 1
         return 0
 
     def deadline(self, assignment):
@@ -32,14 +33,17 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self.class_)
 
-        exist_data = HomeworkModel.query\
-            .join(SingleFileModel)\
-            .join(StudentModel)\
-            .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(HomeworkModel.type == "SINGLE")\
+        exist_data = (
+            HomeworkModel.query.join(SingleFileModel)
+            .join(StudentModel)
+            .filter(StudentModel.student_number.like(student_number_like))
+            .filter(HomeworkModel.type == "SINGLE")
             .all()
+        )
 
-        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
+        students = StudentModel.query.filter(
+            StudentModel.student_number.like(student_number_like)
+        ).all()
 
         return exist_data, students
 
@@ -58,7 +62,7 @@ class PersonalAssignmentView(BaseView):
                     {
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(assignment, student.student_number)
+                        "submit": self.is_submit(assignment, student.student_number),
                     }
                 )
 
@@ -69,14 +73,11 @@ class PersonalAssignmentView(BaseView):
                     "description": assignment.description,
                     "created_at": time.mktime(assignment.created_at.timetuple()),
                     "deadline": time.mktime(self.deadline(assignment).timetuple()),
-                    "class_submit": class_submit
+                    "class_submit": class_submit,
                 }
             )
 
-        return {
-            "personal_assignment": assignments
-        }
-
+        return {"personal_assignment": assignments}
 
     def get_view(self):
         return self.data_merge()
