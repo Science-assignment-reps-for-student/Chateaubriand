@@ -35,7 +35,7 @@ class AccountTestCase(BaseTestCase):
         }
 
         self.common_header = {
-            "Authorization": "Bearer" + jwt_mock(self.app, "ADMIN")
+            "Authorization": "Bearer" + jwt_mock(self.app, "ADMIN", "access_token")
         }
 
 
