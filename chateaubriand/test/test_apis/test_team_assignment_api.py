@@ -7,7 +7,7 @@ from test.test_apis.mocks import jwt_mock
 class TeamAssignmentTestCase(BaseTestCase):
     def test_get(self):
         admin_token = jwt_mock(self.app, "ADMIN")
-        path = "/team-assignment"
+        path = "/admin/team-assignment"
 
         resp_200 = self.test_client.get(path,
             json={"class": 1},
