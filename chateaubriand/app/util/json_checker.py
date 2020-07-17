@@ -6,7 +6,6 @@ from chateaubriand.app.exception import BadRequest
 
 def json_type_validate(json_schema: dict):
     def decorator(fn):
-
         @wraps(fn)
         def wrapper(*args, **kwargs):
             json: dict = request.json
@@ -20,8 +19,9 @@ def json_type_validate(json_schema: dict):
             else:
                 return fn(*args, **kwargs)
             raise BadRequest()
+
         return wrapper
-    
+
     return decorator
 
 

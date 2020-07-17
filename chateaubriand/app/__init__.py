@@ -24,7 +24,7 @@ def create_app(*config_cls) -> Flask:
 
     for config in config_cls:
         app.config.from_object(config)
-    
+
     register_hooks(app)
     register_controllers(app)
     register_extensions(app)
