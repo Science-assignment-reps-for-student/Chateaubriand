@@ -9,13 +9,13 @@ class PersonalAssignmentView(BaseView):
     def __init__(self, class_):
         self.class_ = class_
 
-    def is_submit(self, assignment, student_number):
-        for single_file in assignment.single_files:
-            if single_file.student.student_number == student_number:
-                if single_file.is_late == 1:
-                    return 2
-                else:
-                    return 1
+    def is_submit(self, assignment, student_number, exist_assignments):
+        for exist_assignment in exist_assignments:
+            if exist_assignment.id == assignment.id:
+                for single_file in exist_assignment.single_files:
+                    if single_file.student.student_number == student_number:
+                        if single_file.is_late == 1: return 2
+                        else: return 1
         return 0
 
     def deadline(self, assignment):
@@ -33,28 +33,26 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self.class_)
 
-        exist_data = (
-            HomeworkModel.query.join(SingleFileModel)
-            .join(StudentModel)
-            .filter(StudentModel.student_number.like(student_number_like))
-            .filter(HomeworkModel.type == "SINGLE")
+
+        exist_assignments = HomeworkModel.query\
+            .join(SingleFileModel)\
+            .join(StudentModel)\
+            .filter(StudentModel.student_number.like(student_number_like))\
+            .filter(HomeworkModel.type == "SINGLE")\
+
             .all()
         )
 
-        students = StudentModel.query.filter(
-            StudentModel.student_number.like(student_number_like)
-        ).all()
+        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
+        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
 
-        return exist_data, students
+        return exist_assignments, students, homeworks
 
     def data_merge(self):
-        queried_data = self.query_to_db()
-        exist_data = queried_data[0]
-        students = queried_data[1]
-
+        exist_assignments, students, homeworks = self.query_to_db()
         assignments = []
 
-        for assignment in exist_data:
+        for assignment in homeworks:
             class_submit = []
 
             for student in students:
@@ -62,7 +60,8 @@ class PersonalAssignmentView(BaseView):
                     {
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(assignment, student.student_number),
+                        "submit": self.is_submit(assignment, student.student_number, exist_assignments)
+
                     }
                 )
 

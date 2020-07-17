@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, abort
+from flask import request
 from flask_restful import Resource
 
 from chateaubriand.app.views.admin.personal_assignment import PersonalAssignmentView
