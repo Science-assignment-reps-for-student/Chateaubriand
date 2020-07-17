@@ -10,9 +10,9 @@ class BadRequest(BaseException):
     description = "Bad Request"
 
 
-class Unauthenticate(BaseException):
+class AuthenticateFailed(BaseException):
     code = 401
-    description = "Unauthenticate"
+    description = "AuthenticateFailed"
 
 
 class Conflict(BaseException):

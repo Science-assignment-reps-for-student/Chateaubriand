@@ -6,8 +6,8 @@ from chateaubriand.app.models import HomeworkModel, StudentModel, SingleFileMode
 
 
 class PersonalAssignmentView(BaseView):
-    def __init__(self, class_):
-        self.class_ = class_
+    def __init__(self, _class):
+        self._class = _class
 
     def is_submit(self, assignment, student_number, exist_assignments):
         for exist_assignment in exist_assignments:
@@ -19,19 +19,19 @@ class PersonalAssignmentView(BaseView):
         return 0
 
     def deadline(self, assignment):
-        if self.class_ == 1:
+        if self._class == 1:
             return assignment.deadline_1
-        elif self.class_ == 2:
+        elif self._class == 2:
             return assignment.deadline_2
-        elif self.class_ == 3:
+        elif self._class == 3:
             return assignment.deadline_3
-        elif self.class_ == 4:
+        elif self._class == 4:
             return assignment.deadline_4
         else:
             raise BadRequest
 
     def query_to_db(self):
-        student_number_like = "_{}__".format(self.class_)
+        student_number_like = "_{}__".format(self._class)
 
         exist_assignments = HomeworkModel.query\
             .join(SingleFileModel)\

@@ -17,6 +17,7 @@ def register_extensions(app: Flask):
     extensions.cors.init_app(app)
     extensions.db.init_app(app)
     extensions.jwt.init_app(app)
+    extensions.redis.init_app(app)
 
 
 def create_app(*config_cls) -> Flask:
