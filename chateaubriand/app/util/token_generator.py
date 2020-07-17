@@ -22,9 +22,9 @@ def generate_token(email, token_type, expire_time):
 
 def generate_access_token(email):
     token = generate_token(email, "access_token", ProductionLevelAppConfig.ACCESS_TOKEN_EXPIRE_TIME)
-    return token
+    return token.decode()
 
 
 def generate_refresh_token(email):
     token = generate_token(email, "access_token", ProductionLevelAppConfig.REFRESH_TOKEN_EXPIRE_TIME)
-    return token
+    return token.decode()
