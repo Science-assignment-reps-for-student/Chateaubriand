@@ -15,6 +15,11 @@ class AuthenticateFailed(BaseException):
     description = "AuthenticateFailed"
 
 
+class Unauthorized(BaseException):
+    code = 403
+    description = "Unauthorized"
+
+
 class Conflict(BaseException):
     code = 409
     description = "Conflict"
