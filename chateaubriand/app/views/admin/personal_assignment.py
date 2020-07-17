@@ -33,15 +33,12 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self.class_)
 
-
         exist_assignments = HomeworkModel.query\
             .join(SingleFileModel)\
             .join(StudentModel)\
             .filter(StudentModel.student_number.like(student_number_like))\
             .filter(HomeworkModel.type == "SINGLE")\
-
             .all()
-        )
 
         students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
         homeworks = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
@@ -76,7 +73,7 @@ class PersonalAssignmentView(BaseView):
                 }
             )
 
-        return {"personal_assignment": assignments}
+        return {"personal_assignment": assignments}, 200
 
     def get_view(self):
         return self.data_merge()
