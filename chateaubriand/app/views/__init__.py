@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 class BaseView(metaclass=ABCMeta):
     @abstractmethod
-    def query_to_db(self):
+    def data_merge(self):
         pass
 
     @abstractmethod
