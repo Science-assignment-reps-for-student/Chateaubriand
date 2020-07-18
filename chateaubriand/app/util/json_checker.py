@@ -26,3 +26,6 @@ def json_type_validate(json_schema: dict):
 
 
 GET_ASSIGNMENT_JSON = {"class": int}
+POST_ACCOUNT_JSON = {"email": str, "password": str, "name": str}
+DELETE_ACCOUNT_JSON = {"email": str, "password": str}
+POST_AUTH_JSON = {"email": str, "password": str}
