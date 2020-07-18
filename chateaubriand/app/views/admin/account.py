@@ -8,6 +8,7 @@ class AccountView(BaseView):
 
     def data_merge(self):
         if self._method == "POST": return {"description": "Created"}, 201
+        elif self._method == "DELETE": return {"description": "Success"}, 200
         else: raise ViewError
 
     def get_view(self):
