@@ -20,6 +20,11 @@ class Unauthorized(BaseException):
     description = "Unauthorized"
 
 
+class NotFound(BaseException):
+    code = 404
+    description = "NotFound"
+
+
 class Conflict(BaseException):
     code = 409
     description = "Conflict"
