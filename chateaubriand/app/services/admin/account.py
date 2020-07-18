@@ -1,6 +1,6 @@
 import re
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from chateaubriand.app.extensions import db, redis
 from chateaubriand.app.models.admin import AdminModel
@@ -25,13 +25,14 @@ class AccountService:
     def delete_account(cls, email, password):
         cls.check_email_format(email)
         account = AdminModel.query.filter_by(email=email).first()
-        if not account.password == password: raise NotFound()
+        if not account or not check_password_hash(account.password, password):
+            raise NotFound()
 
         redis_db = redis.get_redis()
         redis_db.delete(email)
 
         db.session.delete(account)
-        db.session.commit(account)
+        db.session.commit()
 
     @classmethod
     def check_email_format(cls, email):
