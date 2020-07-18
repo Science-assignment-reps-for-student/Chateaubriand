@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from chateaubriand.app.extensions import db
 from chateaubriand.app.models.admin import AdminModel
-from chateaubriand.app.exception import Conflict, BadRequest
+from chateaubriand.app.exception import Conflict, BadRequest, NotFound
 
 
 class AccountService:
@@ -13,13 +13,22 @@ class AccountService:
         cls.check_email_format(email)
         if AdminModel.query.filter_by(email=email).first(): raise Conflict()
 
-        admin = AdminModel(
+        account = AdminModel(
             email=email,
             password=generate_password_hash(password),
             name=name
         )
-        db.session.add(admin)
+        db.session.add(account)
         db.session.commit()
+
+    @classmethod
+    def delete_account(cls, email, password):
+        cls.check_email_format(email)
+        account = AdminModel.query.filter_by(email=email).first()
+        if not account.password == password: raise NotFound()
+
+        db.session.delete(account)
+        db.session.commit(account)
 
     @classmethod
     def check_email_format(cls, email):
