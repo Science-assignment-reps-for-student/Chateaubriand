@@ -2,7 +2,7 @@ import re
 
 from werkzeug.security import generate_password_hash
 
-from chateaubriand.app.extensions import db
+from chateaubriand.app.extensions import db, redis
 from chateaubriand.app.models.admin import AdminModel
 from chateaubriand.app.exception import Conflict, BadRequest, NotFound
 
@@ -26,6 +26,9 @@ class AccountService:
         cls.check_email_format(email)
         account = AdminModel.query.filter_by(email=email).first()
         if not account.password == password: raise NotFound()
+
+        redis_db = redis.get_redis()
+        redis_db.delete(email)
 
         db.session.delete(account)
         db.session.commit(account)
