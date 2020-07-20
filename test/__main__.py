@@ -7,6 +7,9 @@ from test.test_apis import (
     PersonalAssignmentTestCase,
     TeamAssignmentTestCase,
     ExperimentAssignmentTestCase,
+    TokenTestCase,
+    AuthTestCase,
+    AccountTestCase
 )
 
 
@@ -37,6 +40,9 @@ if __name__ == "__main__":
             PersonalAssignmentTestCase,
             TeamAssignmentTestCase,
             ExperimentAssignmentTestCase,
+            AuthTestCase,
+            AccountTestCase,
+            TokenTestCase
         ]
     )
     runner = unittest.TextTestRunner()
