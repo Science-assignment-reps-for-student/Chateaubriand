@@ -10,4 +10,5 @@ def payload_builder(payload, user_type, token_type, invalid):
 
 def jwt_mock(app, user_type, token_type, invalid=False):
     payload = payload_builder({}, user_type, token_type, invalid)
-    return jwt.encode(payload=payload, key=app.config["SECRET_KEY"], algorithm="HS256")
+    token = jwt.encode(payload=payload, key=app.config["SECRET_KEY"], algorithm="HS256")
+    return token.decode()
