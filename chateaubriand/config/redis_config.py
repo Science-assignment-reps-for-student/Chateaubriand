@@ -12,3 +12,9 @@ class RemoteRedisConfig:
     REDIS_PORT = os.getenv("REDIS_PORT")
     REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
     REDIS_DB = os.getenv("REDIS_DB")
+
+class TestRedisConfig:
+    REDIS_HOST = os.getenv("TEST_REDIS_HOST")
+    REDIS_PORT = os.getenv("TEST_REDIS_PORT")
+    REDIS_PASSWORD = os.getenv("TEST_REDIS_PASSWORD")
+    REDIS_DB = os.getenv("TEST_REDIS_DB")
