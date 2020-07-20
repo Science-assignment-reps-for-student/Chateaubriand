@@ -28,3 +28,7 @@ def generate_access_token(email):
 def generate_refresh_token(email):
     token = generate_token(email, "access_token", ProductionLevelAppConfig.REFRESH_TOKEN_EXPIRE_TIME)
     return token.decode()
+
+def decode_token(token):
+    email = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["sub"]
+    return email
