@@ -10,7 +10,7 @@ def generate_token(email, token_type, expire_time):
         "exp": int(time.time()) + int(expire_time.seconds),
         "sub": email,
         "type": token_type,
-        "admin": "true"
+        "authority": "ADMIN"
     }
 
     return jwt.encode(
