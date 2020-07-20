@@ -37,7 +37,7 @@ jobs:
           
       - name: Test
         run: |
-          pytest --cov=./ 
+          pytest --cov=./ test
           
   DOCKER_BUILD_PUSH:
     needs: [CI]
