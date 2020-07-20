@@ -5,7 +5,8 @@ from test.test_apis.mocks import jwt_mock
 
 
 class AuthTestCase(BaseTestCase):
-    def __init__(self):
+    def setUp(self):
+        super().setUp()
         self.path = "/admin/auth"
         self.common_body_post = {
             "email": "test@test.com",
@@ -21,7 +22,6 @@ class AuthTestCase(BaseTestCase):
             "password": "wrong_password"
         }
 
-    def setUp(self):
         self.test_client.post(
             "admin/account",
             json = {

@@ -5,7 +5,8 @@ from test.test_apis.mocks import jwt_mock
 
 
 class TokenTestCase(BaseTestCase):
-    def __init__(self):
+    def setUp(self):
+        super().setUp()
         self.path = "/admin/token"
         self.common_post = {
             "access_token": jwt_mock(self.app, "ADMIN", "access_token"),
