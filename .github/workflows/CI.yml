@@ -11,9 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
-      DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.TEST_DATABASE_HOST}}
+      TEST_DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
+      TEST_DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+      TEST_DATABASE_HOST: ${{ secrets.TEST_DATABASE_HOST}}
+      TEST_REDIS_HOST: ${{ secrets.TEST_REDIS_HOST }}
+      TEST_REDIS_PORT: ${{ secrets.TEST_REDIS_PORT }}
+      TEST_REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }}
+      TEST_REDIS_DB: ${{ secrets.TEST_REDIS_DB }}
     steps:
       - uses: actions/checkout@v2
         
@@ -29,7 +33,6 @@ jobs:
 
       - name: Test
         run: |
-          cd chateaubriand
           python -m test
           
   DOCKER_BUILD_PUSH:
@@ -39,8 +42,11 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.DATABASE_HOST}}
-      
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      REDIS_DB: ${{ secrets.REDIS_DB }}
     steps:
       - uses: actions/checkout@v2
         
