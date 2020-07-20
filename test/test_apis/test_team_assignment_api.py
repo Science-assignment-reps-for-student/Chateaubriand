@@ -4,9 +4,10 @@ from test import BaseTestCase
 from test.test_apis.mocks import jwt_mock
 
 
-class PersonalAssignmentTestCase(BaseTestCase):
-    def __init__(self):
-        self.path = "/admin/personal-assignment"
+class TeamAssignmentTestCase(BaseTestCase):
+    def setUp(self):
+        super().setUp()
+        self.path = "/admin/team-assignment"
         self.common_get = {
             "class": 1
         }
@@ -16,11 +17,11 @@ class PersonalAssignmentTestCase(BaseTestCase):
         }
 
         self.common_header = {
-            "Authorization": "Bearer" + jwt_mock(self.app, "ADMIN", "access_token")
+            "Authorization": jwt_mock(self.app, "ADMIN", "access_token")
         }
 
         self.invalid_header = {
-            "Authorization": "Bearer" + jwt_mock(self.app, "STUDENT", "access_token")
+            "Authorization": jwt_mock(self.app, "STUDENT", "access_token")
         }
 
     def test_get(self):

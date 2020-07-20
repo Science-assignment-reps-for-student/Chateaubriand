@@ -5,7 +5,8 @@ from test.test_apis.mocks import jwt_mock
 
 
 class AccountTestCase(BaseTestCase):
-    def __init__(self):
+    def setUp(self):
+        super().setUp()
         self.path = "/admin/account"
         self.duplicate_body_post = {
             "email": "same@same.same",
@@ -35,12 +36,9 @@ class AccountTestCase(BaseTestCase):
         }
 
         self.common_header = {
-            "Authorization": "Bearer" + jwt_mock(self.app, "ADMIN", "access_token")
+            "Authorization": jwt_mock(self.app, "ADMIN", "access_token")
         }
 
-
-
-    def setUp(self):
         self.test_client.post(
             self.path,
             json = self.duplicate_body_post
@@ -70,13 +68,13 @@ class AccountTestCase(BaseTestCase):
         resp_200 = self.test_client.delete(
             self.path,
             json = self.common_body_delete,
-            header = self.common_header,
+            headers = self.common_header,
         )
 
         resp_400 = self.test_client.delete(
             self.path,
             json = self.invalid_body_delete,
-            header = self.common_header
+            headers = self.common_header
         )
 
         resp_401 = self.test_client.delete(
