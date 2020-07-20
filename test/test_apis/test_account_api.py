@@ -68,13 +68,13 @@ class AccountTestCase(BaseTestCase):
         resp_200 = self.test_client.delete(
             self.path,
             json = self.common_body_delete,
-            header = self.common_header,
+            headers = self.common_header,
         )
 
         resp_400 = self.test_client.delete(
             self.path,
             json = self.invalid_body_delete,
-            header = self.common_header
+            headers = self.common_header
         )
 
         resp_401 = self.test_client.delete(
