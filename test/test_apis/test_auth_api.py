@@ -1,7 +1,4 @@
-import os
-
 from test import BaseTestCase
-from test.test_apis.mocks import jwt_mock
 
 
 class AuthTestCase(BaseTestCase):
