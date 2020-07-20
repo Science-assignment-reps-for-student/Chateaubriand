@@ -18,3 +18,7 @@ class ProductionLevelAppConfig(DefaultAppConfig):
     ENV = "production"
     DEBUG = False
     SECRET_KEY = os.getenv("SECRET_KEY")
+
+
+class TestLevelAppConfig(ProductionLevelAppConfig):
+    pass
