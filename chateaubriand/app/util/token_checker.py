@@ -7,19 +7,14 @@ from chateaubriand.app.exception import Unauthorized, AuthenticateFailed
 from chateaubriand.config.app_config import ProductionLevelAppConfig
 
 
-def available_token():
-    def decorator(fn):
+def available_token(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        try: token = request.headers["Authorization"][7:]
+        except: raise AuthenticateFailed()
 
-        @wraps(fn)
-        def wrapper(*args, **kwargs):
-            try: token = request.headers["Authorization"]
-            except: raise AuthenticateFailed()
+        type = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["authority"]
+        if not type == "ADMIN": raise Unauthorized()
 
-            type = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["admin"]
-            if not type == "true": raise Unauthorized()
-
-            return fn(*args, **kwargs)
-
-        return wrapper
-
-    return decorator
+        return fn(*args, **kwargs)
+    return wrapper
