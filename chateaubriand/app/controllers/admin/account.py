@@ -15,7 +15,7 @@ class Account(Resource):
         return view
 
     @json_type_validate(DELETE_ACCOUNT_JSON)
-    @available_token()
+    @available_token
     def delete(self):
         AccountService.delete_account(request.json["email"], request.json["password"])
         account_view = AccountView("DELETE")

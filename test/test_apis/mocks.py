@@ -2,10 +2,10 @@ import jwt
 
 
 def payload_builder(payload, user_type, token_type, invalid):
-    if invalid: payload["sub"] = "invalid@test.com"
-    else: payload["sub"] = "test@test.com"
+    if invalid: payload["sub"] = 1
+    else: payload["sub"] = 2
     payload["type"] = token_type
-    if user_type == "ADMIN": payload["admin"] = "true"
+    payload["authority"] = user_type
     return payload
 
 def jwt_mock(app, user_type, token_type, invalid=False):
