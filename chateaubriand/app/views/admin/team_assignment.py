@@ -24,6 +24,9 @@ class TeamAssignmentView(BaseView):
 
         return members
 
+    def is_submit(self):
+        pass
+
     def get_teams_info(self, teams, homework_id):
         teams_info = []
         for team in teams:
@@ -37,6 +40,15 @@ class TeamAssignmentView(BaseView):
 
         return teams_info
 
+    def get_evaluation(self, students):
+        peer_evaluation_submit = []
+        for student in students:
+            peer_evaluation_submit.append({
+                "name": student.name,
+                "student_number": student.student_number,
+                "submit": 0
+            })
+        return peer_evaluation_submit
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
@@ -55,20 +67,11 @@ class TeamAssignmentView(BaseView):
 
     def data_merge(self):
         teams, students, homeworks = self.query_to_db()
-
         assignment = []
 
         for homework in homeworks:
-            peer_evaluation_submit = []
-            for student in students:
-                peer_evaluation_submit.append({
-                    "name": "오준상",
-                    "student_number": "1101",
-                    "submit": 0
-                })
-
+            peer_evaluation_submit = self.get_evaluation(students)
             teams_info = self.get_teams_info(teams, homework.id)
-
             assignment.append({
                 "id": homework.id,
                 "title": homework.title,
