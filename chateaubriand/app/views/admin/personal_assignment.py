@@ -41,15 +41,15 @@ class PersonalAssignmentView(BaseView):
             .all()
 
         students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
+        assignments = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
 
-        return exist_assignments, students, homeworks
+        return exist_assignments, students, assignments
 
     def data_merge(self):
-        exist_assignments, students, homeworks = self.query_to_db()
+        exist_assignments, students, assignments = self.query_to_db()
         assignments = []
 
-        for assignment in homeworks:
+        for assignment in assignments:
             class_submit = []
 
             for student in students:
