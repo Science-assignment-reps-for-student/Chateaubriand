@@ -1,8 +1,8 @@
 from chateaubriand.app.extensions import db
 
 
-class SingleFileModel(db.Model):
-    __tablename__ = "single_file"
+class PersonalFileModel(db.Model):
+    __tablename__ = "personal_file"
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"))
@@ -12,5 +12,5 @@ class SingleFileModel(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     is_late = db.Column(db.Boolean, nullable=False)
 
-    homeworks = db.relationship("HomeworkModel")
+    assignments = db.relationship("AssignmentModel")
     student = db.relationship("StudentModel")
