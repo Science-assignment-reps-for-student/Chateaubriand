@@ -3,7 +3,7 @@ import re
 from werkzeug.security import check_password_hash
 
 from chateaubriand.app.extensions import redis
-from chateaubriand.app.models.admin import AdminModel
+from chateaubriand.app.models import AdminModel
 from chateaubriand.app.exception import AuthenticateFailed, BadRequest
 from chateaubriand.app.util.token_generator import generate_refresh_token
 
