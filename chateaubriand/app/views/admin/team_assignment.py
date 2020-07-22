@@ -41,46 +41,49 @@ class TeamAssignmentView(BaseView):
             .all()
 
         students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
+        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "MULTI").all()
 
         return exist_assignments, students, homeworks
 
     def data_merge(self):
+        teams ,students, homeworks = self.query_to_db()
+
         assignment = []
-        assignment.append({
-            "id": "id",
-            "title": "title",
-            "description": "description",
-            "created_at": "created_at",
-            "deadline": "deadline",
-            "peer_evaluation_submit": [
-				{
-					"name": "오준상",
-					"student_number": "1101",
-					"submit": 0
-				},
-				{
-					"name": "김어진",
-					"student_number": "1102",
-					"submit": 1
-				}
-			],
-            "team_submit": [
-				{
-					"team_name": "앙김어眞",
-					"submit": 0,
-					"member": [
-						{
-							"name": "오준상",
-							"student_number": "1101"
-						},
-						{
-							"name": "김어진",
-							"student_number": "1102"
-						}
-					]
-				}
-        })
+
+        for homework in homeworks:
+            peer_evaluation_submit = []
+            for student in students:
+                peer_evaluation_submit.append({
+                    "name": "오준상",
+                    "student_number": "1101",
+                    "submit": 0
+                })
+
+            team_submit = []
+            for team in teams:
+                members = []
+                for member in team.members:
+                    members.append({
+                        "name": "오준상",
+                        "student": "1101"
+                    })
+
+                team_submit.append({
+                    "team_name": "teamName",
+                    "submit": "Submit",
+                    "member": []
+                })
+
+
+            assignment.append({
+                "id": homework.id,
+                "title": homework.title,
+                "description": homework.description,
+                "created_at": homework.created_at,
+                "deadline": time.mktime(homework.created_at.timetuple()),
+                "peer_evaluation_submit": peer_evaluation_submit,
+                "team_submit": team_submit
+            })
 
         return {"team_assignment": assignment}, 200
 
