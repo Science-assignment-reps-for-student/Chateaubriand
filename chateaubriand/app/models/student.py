@@ -10,4 +10,4 @@ class StudentModel(db.Model):
     student_number = db.Column(db.String(4), nullable=False, unique=True)
     name = db.Column(db.String, nullable=False)
 
-    single_files = db.relationship("SingleFileModel")
+    personal_files = db.relationship("PersonalFileModel")
