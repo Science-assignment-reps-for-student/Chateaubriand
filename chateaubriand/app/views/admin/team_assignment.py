@@ -2,51 +2,59 @@ import time
 
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import HomeworkModel, StudentModel, SingleFileModel
+from chateaubriand.app.models import HomeworkModel, StudentModel, TeamModel, MemberModel
 
 
 class TeamAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
-    def is_submit(self, assignment, student_number, exist_assignments):
-        for exist_assignment in exist_assignments:
-            if exist_assignment.id == assignment.id:
-                for single_file in exist_assignment.single_files:
-                    if single_file.student.student_number == student_number:
-                        if single_file.is_late == 1: return 2
-                        else: return 1
-        return 0
+    def get_student_info(self, student_id):
+        student_info = StudentModel.query.filter_by(id=student_id).first()
+        return student_info.name, student_info.student_number
 
-    def deadline(self, assignment):
-        if self._class == 1:
-            return assignment.deadline_1
-        elif self._class == 2:
-            return assignment.deadline_2
-        elif self._class == 3:
-            return assignment.deadline_3
-        elif self._class == 4:
-            return assignment.deadline_4
-        else:
-            raise BadRequest
+    def get_members(self, team):
+        members = []
+        for member in team.members:
+            student_name, student_number = self.get_student_info(member.student_id)
+            members.append({
+                "name": student_name,
+                "student": student_number
+            })
+
+        return members
+
+    def get_teams_info(self, teams, homework_id):
+        teams_info = []
+        for team in teams:
+            if team.homework_id == homework_id:
+                members = self.get_members(team)
+                teams_info.append({
+                    "team_name": team.team,
+                    "submit": "Submit",
+                    "members": members
+                })
+
+        return teams_info
+
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        exist_assignments = HomeworkModel.query\
-            .join(SingleFileModel)\
+        teams = TeamModel.query\
             .join(StudentModel)\
+            .join(HomeworkModel)\
             .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(HomeworkModel.type == "SINGLE")\
+            .filter(HomeworkModel.type == "MULTI")\
             .all()
 
         students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
         homeworks = HomeworkModel.query.filter(HomeworkModel.type == "MULTI").all()
 
-        return exist_assignments, students, homeworks
+        return teams, students, homeworks
 
     def data_merge(self):
-        teams ,students, homeworks = self.query_to_db()
+        teams, students, homeworks = self.query_to_db()
 
         assignment = []
 
@@ -59,21 +67,7 @@ class TeamAssignmentView(BaseView):
                     "submit": 0
                 })
 
-            team_submit = []
-            for team in teams:
-                members = []
-                for member in team.members:
-                    members.append({
-                        "name": "오준상",
-                        "student": "1101"
-                    })
-
-                team_submit.append({
-                    "team_name": "teamName",
-                    "submit": "Submit",
-                    "member": []
-                })
-
+            teams_info = self.get_teams_info(teams, homework.id)
 
             assignment.append({
                 "id": homework.id,
@@ -82,7 +76,7 @@ class TeamAssignmentView(BaseView):
                 "created_at": homework.created_at,
                 "deadline": time.mktime(homework.created_at.timetuple()),
                 "peer_evaluation_submit": peer_evaluation_submit,
-                "team_submit": team_submit
+                "teams_info": teams_info
             })
 
         return {"team_assignment": assignment}, 200
