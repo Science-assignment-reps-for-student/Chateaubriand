@@ -6,7 +6,7 @@ class SelfEvaluationModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"))
-    homework_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
+    assignment_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
     scientific_accuracy = db.Column(db.Integer, nullable=False)
     communication = db.Column(db.Integer, nullable=False)
     attitude = db.Column(db.Integer, nullable=False)

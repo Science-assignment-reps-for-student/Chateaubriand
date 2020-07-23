@@ -6,7 +6,7 @@ class PersonalFileModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey("student.id"))
-    homework_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
+    assignment_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
     file_name = db.Column(db.String, nullable=False)
     path = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
