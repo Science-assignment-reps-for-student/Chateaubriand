@@ -2,7 +2,7 @@ import time
 
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import AssignmentModel, StudentModel, TeamModel, MemberModel
+from chateaubriand.app.models import AssignmentModel, StudentModel, TeamModel, MemberModel, TeamFileModel
 
 
 class TeamAssignmentView(BaseView):
@@ -41,12 +41,17 @@ class TeamAssignmentView(BaseView):
                 teams_info.append({
                     "team_id": team.id,
                     "team_name": team.name,
-                    "submit": self.get_team_submit(),
+                    "submit": self.get_team_submit(team),
                     "members": members
                 })
 
         return teams_info
 
+    def get_team_submit(self, team):
+        team_file = TeamFileModel.query.filter_by(team_id=team.id).first()
+        if not team_file: return 0
+        if team_file.is_late == False: return 1
+        return 2
 
     def get_evaluation(self, students):
         evaluation_submit = []
@@ -61,6 +66,8 @@ class TeamAssignmentView(BaseView):
 
         return evaluation_submit
 
+    def get_evaluation_submit(self):
+        return 0
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
