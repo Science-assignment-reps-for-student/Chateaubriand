@@ -6,5 +6,7 @@ class TeamModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     leader_id = db.Column(db.Integer, db.ForeignKey("student.id"))
-    homework_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
+    assignment_id = db.Column(db.Integer, db.ForeignKey("homework.id"))
     name = db.Column(db.String)
+
+    members = db.relationship("MemberModel")

@@ -2,7 +2,7 @@ import time
 
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import HomeworkModel, StudentModel, SingleFileModel
+from chateaubriand.app.models import AssignmentModel, StudentModel, PersonalFileModel
 
 
 class PersonalAssignmentView(BaseView):
@@ -33,23 +33,23 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        exist_assignments = HomeworkModel.query\
-            .join(SingleFileModel)\
+        exist_assignments = AssignmentModel.query\
+            .join(PersonalFileModel)\
             .join(StudentModel)\
             .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(HomeworkModel.type == "SINGLE")\
+            .filter(AssignmentModel.type == "SINGLE")\
             .all()
 
         students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "SINGLE").all()
+        assignments = AssignmentModel.query.filter(AssignmentModel.type == "SINGLE").all()
 
-        return exist_assignments, students, homeworks
+        return exist_assignments, students, assignments
 
     def data_merge(self):
-        exist_assignments, students, homeworks = self.query_to_db()
+        exist_assignments, students, assignments = self.query_to_db()
         assignments = []
 
-        for assignment in homeworks:
+        for assignment in assignments:
             class_submit = []
 
             for student in students:
