@@ -42,24 +42,24 @@ class TeamAssignmentView(BaseView):
         return assignments
 
     def data_merge(self):
-        assignments = self.query_to_db()
-        assignment = list()
+        assignments_model = self.query_to_db()
+        assignments = list()
 
-        for assignment in assignments:
+        for assignment in assignments_model:
             # peer_evaluation_submit = self.get_evaluation(students)
             teams_info = self.get_teams_info(assignment)
-            assignment.append({
+            assignments.append({
                 "id": assignment.id,
                 "title": assignment.title,
                 "description": assignment.description,
-                "created_at": assignment.created_at,
+                "created_at": time.mktime(assignment.created_at.timetuple()),
                 "deadline": time.mktime(assignment.created_at.timetuple()),
                 # "peer_evaluation_submit": peer_evaluation_submit,
                 "teams_info": teams_info
             })
 
 
-        return {"team_assignment": assignment}, 200
+        return {"team_assignment": assignments}, 200
 
     def get_view(self):
         return self.data_merge()
