@@ -1,8 +1,17 @@
 import time
 
+from chateaubriand.app.extensions import db
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import AssignmentModel, StudentModel, TeamModel, MemberModel, TeamFileModel
+from chateaubriand.app.models import (
+    AssignmentModel,
+    StudentModel,
+    TeamModel,
+    MemberModel,
+    TeamFileModel,
+    SelfEvaluationModel,
+    MutualEvaluationModel
+)
 
 
 class TeamAssignmentView(BaseView):
@@ -53,7 +62,7 @@ class TeamAssignmentView(BaseView):
         if team_file.is_late == False: return 1
         return 2
 
-    def get_evaluation(self, students):
+    def get_evaluation(self, students, assignment_id):
         evaluation_submit = []
 
         for student in students:
@@ -61,12 +70,29 @@ class TeamAssignmentView(BaseView):
                         "student_id": student.id,
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.get_evaluation_submit()
+                        "submit": self.get_evaluation_submit(student, assignment_id)
                     })
 
         return evaluation_submit
 
-    def get_evaluation_submit(self):
+    def get_evaluation_submit(self, student, assignment_id):
+        self_evaluation = SelfEvaluationModel.query.filter(
+            db.and_(SelfEvaluationModel.assignment_id == assignment_id,
+                    SelfEvaluationModel.student_id == student.id)).first()
+
+        if not self_evaluation: return 0
+
+        team = TeamModel.query.filter(TeamModel.assignment_id == assignment_id)\
+            .join(MemberModel)\
+            .filter(MemberModel.student_id == student.id).first()
+
+        if not team: return 2
+
+        if len(team.members) == MutualEvaluationModel.query.filter(db.and_(
+            MutualEvaluationModel.student_id == student.id,
+            MutualEvaluationModel.assignment_id == assignment_id
+        )): return 1
+
         return 0
 
     def query_to_db(self):
@@ -81,7 +107,7 @@ class TeamAssignmentView(BaseView):
         assignments = list()
 
         for assignment in assignments_model:
-            peer_evaluation_submit = self.get_evaluation(students)
+            peer_evaluation_submit = self.get_evaluation(students, assignment.id)
             teams_info = self.get_teams_info(assignment)
             assignments.append({
                 "id": assignment.id,
