@@ -41,24 +41,40 @@ class TeamAssignmentView(BaseView):
                 teams_info.append({
                     "team_id": team.id,
                     "team_name": team.name,
-                    "submit": 1,
+                    "submit": self.get_team_submit(),
                     "members": members
                 })
 
         return teams_info
 
-    def query_to_db(self):
-        # student_number_like = "_{}__".format(self._class)
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
 
-        return assignments
+    def get_evaluation(self, students):
+        evaluation_submit = []
+
+        for student in students:
+            evaluation_submit.append({
+                        "student_id": student.id,
+                        "name": student.name,
+                        "student_number": student.student_number,
+                        "submit": self.get_evaluation_submit()
+                    })
+
+        return evaluation_submit
+
+
+    def query_to_db(self):
+        student_number_like = "_{}__".format(self._class)
+        assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
+        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
+
+        return assignments, students
 
     def data_merge(self):
-        assignments_model = self.query_to_db()
+        assignments_model, students = self.query_to_db()
         assignments = list()
 
         for assignment in assignments_model:
-            # peer_evaluation_submit = self.get_evaluation(students)
+            peer_evaluation_submit = self.get_evaluation(students)
             teams_info = self.get_teams_info(assignment)
             assignments.append({
                 "id": assignment.id,
@@ -66,7 +82,7 @@ class TeamAssignmentView(BaseView):
                 "description": assignment.description,
                 "created_at": time.mktime(assignment.created_at.timetuple()),
                 "deadline": time.mktime(self.deadline(assignment).timetuple()),
-                # "peer_evaluation_submit": peer_evaluation_submit,
+                "peer_evaluation_submit": peer_evaluation_submit,
                 "teams_info": teams_info
             })
 
