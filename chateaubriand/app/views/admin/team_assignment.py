@@ -2,85 +2,62 @@ import time
 
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
-from chateaubriand.app.models import HomeworkModel, StudentModel, TeamModel, MemberModel
+from chateaubriand.app.models import AssignmentModel, StudentModel, TeamModel, MemberModel
 
 
 class TeamAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
-    def get_student_info(self, student_id):
-        student_info = StudentModel.query.filter_by(id=student_id).first()
-        return student_info.name, student_info.student_number
-
-    def get_members(self, team):
-        members = []
-        for member in team.members:
-            student_name, student_number = self.get_student_info(member.student_id)
-            members.append({
-                "name": student_name,
-                "student": student_number
-            })
-
-        return members
-
-    def is_submit(self):
-        pass
-
-    def get_teams_info(self, teams, homework_id):
+    def get_teams_info(self, assignment):
         teams_info = []
+        teams = TeamModel.query.filter(TeamModel.assignment_id == assignment.id)\
+            .join(MemberModel) \
+            .filter(
+                StudentModel.query.filter_by(id=TeamModel.leader_id).first()
+                .student_number[1] == self._class)\
+            .all()
+
         for team in teams:
-            if team.homework_id == homework_id:
-                members = self.get_members(team)
-                teams_info.append({
-                    "team_name": team.team,
-                    "submit": "Submit",
-                    "members": members
+            members = []
+            for member in team.members:
+                member_info = StudentModel.query.filter_by(id=member.student_id).first()
+                members.append({
+                    "name": member_info.name,
+                    "student_number": member_info.student_number
                 })
+            teams_info.append({
+                "team_name": team.name,
+                "submit": 1,
+                "members": members
+            })
 
         return teams_info
-
-    def get_evaluation(self, students):
-        peer_evaluation_submit = []
-        for student in students:
-            peer_evaluation_submit.append({
-                "name": student.name,
-                "student_number": student.student_number,
-                "submit": 0
-            })
-        return peer_evaluation_submit
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        teams = TeamModel.query\
-            .join(StudentModel)\
-            .join(HomeworkModel)\
-            .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(HomeworkModel.type == "MULTI")\
-            .all()
+        assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
 
-        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-        homeworks = HomeworkModel.query.filter(HomeworkModel.type == "MULTI").all()
-
-        return teams, students, homeworks
+        return assignments
 
     def data_merge(self):
-        teams, students, homeworks = self.query_to_db()
-        assignment = []
+        assignments = self.query_to_db()
+        assignment = list()
 
-        for homework in homeworks:
-            peer_evaluation_submit = self.get_evaluation(students)
-            teams_info = self.get_teams_info(teams, homework.id)
+        for assignment in assignments:
+            # peer_evaluation_submit = self.get_evaluation(students)
+            teams_info = self.get_teams_info(assignment)
             assignment.append({
-                "id": homework.id,
-                "title": homework.title,
-                "description": homework.description,
-                "created_at": homework.created_at,
-                "deadline": time.mktime(homework.created_at.timetuple()),
-                "peer_evaluation_submit": peer_evaluation_submit,
+                "id": assignment.id,
+                "title": assignment.title,
+                "description": assignment.description,
+                "created_at": assignment.created_at,
+                "deadline": time.mktime(assignment.created_at.timetuple()),
+                # "peer_evaluation_submit": peer_evaluation_submit,
                 "teams_info": teams_info
             })
+
 
         return {"team_assignment": assignment}, 200
 
