@@ -11,5 +11,3 @@ class MutualEvaluationModel(db.Model):
     communication = db.Column(db.Integer, nullable=False)
     cooperation = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
-
-    students = db.Relationship("StudentModel")

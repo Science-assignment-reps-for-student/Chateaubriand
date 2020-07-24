@@ -12,5 +12,4 @@ class PersonalFileModel(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     is_late = db.Column(db.Boolean, nullable=False)
 
-    assignments = db.relationship("AssignmentModel")
     student = db.relationship("StudentModel")

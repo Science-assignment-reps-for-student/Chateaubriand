@@ -13,5 +13,3 @@ class AssignmentModel(db.Model):
     description = db.Column(db.String)
     type = db.Column(db.Enum("PERSONAL", "TEAM", "EXPERIMENT"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
-
-    personal_files = db.relationship("PersonalFileModel")
