@@ -25,30 +25,30 @@ class TeamAssignmentView(BaseView):
         teams_info = []
         teams = TeamModel.query.filter(TeamModel.assignment_id == assignment.id)\
             .join(MemberModel) \
-            .filter(
-                StudentModel.query.filter_by(id=TeamModel.leader_id).first()
-                .student_number[1] == self._class)\
             .all()
 
         for team in teams:
-            members = []
-            for member in team.members:
-                member_info = StudentModel.query.filter_by(id=member.student_id).first()
-                members.append({
-                    "name": member_info.name,
-                    "student_number": member_info.student_number
+            if str(StudentModel.query.filter(
+                    StudentModel.id == team.leader_id)
+                           .first().student_number)[1] == self._class:
+                members = []
+                for member in team.members:
+                    member_info = StudentModel.query.filter_by(id=member.student_id).first()
+                    members.append({
+                        "name": member_info.name,
+                        "student_number": member_info.student_number
+                    })
+                teams_info.append({
+                    "team_id": team.id,
+                    "team_name": team.name,
+                    "submit": 1,
+                    "members": members
                 })
-            teams_info.append({
-                "team_name": team.name,
-                "submit": 1,
-                "members": members
-            })
 
         return teams_info
 
     def query_to_db(self):
-        student_number_like = "_{}__".format(self._class)
-
+        # student_number_like = "_{}__".format(self._class)
         assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
 
         return assignments
