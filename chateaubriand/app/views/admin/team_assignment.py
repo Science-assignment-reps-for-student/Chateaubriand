@@ -9,6 +9,18 @@ class TeamAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
+    def deadline(self, assignment):
+        if self._class == "1":
+            return assignment.deadline_1
+        elif self._class == "2":
+            return assignment.deadline_2
+        elif self._class == "3":
+            return assignment.deadline_3
+        elif self._class == "4":
+            return assignment.deadline_4
+        else:
+            raise BadRequest
+
     def get_teams_info(self, assignment):
         teams_info = []
         teams = TeamModel.query.filter(TeamModel.assignment_id == assignment.id)\
@@ -53,7 +65,7 @@ class TeamAssignmentView(BaseView):
                 "title": assignment.title,
                 "description": assignment.description,
                 "created_at": time.mktime(assignment.created_at.timetuple()),
-                "deadline": time.mktime(assignment.created_at.timetuple()),
+                "deadline": time.mktime(self.deadline(assignment).timetuple()),
                 # "peer_evaluation_submit": peer_evaluation_submit,
                 "teams_info": teams_info
             })
