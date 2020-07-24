@@ -88,10 +88,10 @@ class TeamAssignmentView(BaseView):
 
         if not team: return 2
 
-        if len(team.members) == MutualEvaluationModel.query.filter(db.and_(
+        if len(team.members) == len(MutualEvaluationModel.query.filter(db.and_(
             MutualEvaluationModel.student_id == student.id,
             MutualEvaluationModel.assignment_id == assignment_id
-        )): return 1
+        )).all()) + 1: return 1
 
         return 0
 
