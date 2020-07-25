@@ -1,5 +1,7 @@
 import time
 
+from chateaubriand.app.extensions import db
+
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
 from chateaubriand.app.models import AssignmentModel, StudentModel, PersonalFileModel
@@ -9,14 +11,15 @@ class PersonalAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
-    def is_submit(self, assignment, student_number, exist_assignments):
-        for exist_assignment in exist_assignments:
-            if exist_assignment.id == assignment.id:
-                for single_file in exist_assignment.single_files:
-                    if single_file.student.student_number == student_number:
-                        if single_file.is_late == 1: return 2
-                        else: return 1
-        return 0
+    def is_submit(self, assignment_id, student_id):
+        personal_file = PersonalFileModel.query.filter(db.end_(
+            assignment_id == PersonalFileModel.assignment_id,
+            student_id == PersonalFileModel.student_id
+        ))
+
+        if personal_file is None: return 0
+        if personal_file.is_late == True: return 2
+        return 1
 
     def deadline(self, assignment):
         if self._class == "1":
