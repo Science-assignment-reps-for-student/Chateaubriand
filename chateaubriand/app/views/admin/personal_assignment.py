@@ -19,13 +19,13 @@ class PersonalAssignmentView(BaseView):
         return 0
 
     def deadline(self, assignment):
-        if self._class == 1:
+        if self._class == "1":
             return assignment.deadline_1
-        elif self._class == 2:
+        elif self._class == "2":
             return assignment.deadline_2
-        elif self._class == 3:
+        elif self._class == "3":
             return assignment.deadline_3
-        elif self._class == 4:
+        elif self._class == "4":
             return assignment.deadline_4
         else:
             raise BadRequest
