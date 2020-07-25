@@ -33,23 +33,18 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        exist_assignments = AssignmentModel.query\
-            .join(PersonalFileModel)\
-            .join(StudentModel)\
-            .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(AssignmentModel.type == "SINGLE")\
-            .all()
-
-        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
         assignments = AssignmentModel.query.filter(AssignmentModel.type == "SINGLE").all()
+        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
 
-        return exist_assignments, students, assignments
+
+
+        return assignments, students
 
     def data_merge(self):
-        exist_assignments, students, assignments = self.query_to_db()
-        assignments = []
+        assignments_model, students = self.query_to_db()
+        assignments = list()
 
-        for assignment in assignments:
+        for assignment in assignments_model:
             class_submit = []
 
             for student in students:
