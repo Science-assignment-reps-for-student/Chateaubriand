@@ -1,5 +1,6 @@
 from chateaubriand.app.models.assignment import AssignmentModel
 
+from chateaubriand.app.models.experiment_file import ExperimentFileModel
 from chateaubriand.app.models.team_file import TeamFileModel
 from chateaubriand.app.models.personal_file import PersonalFileModel
 
