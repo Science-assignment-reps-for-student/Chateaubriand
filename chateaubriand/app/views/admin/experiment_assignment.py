@@ -8,13 +8,13 @@ from chateaubriand.app.models import (
     StudentModel,
     TeamModel,
     MemberModel,
-    TeamFileModel,
+    ExperimentFileModel,
     SelfEvaluationModel,
     MutualEvaluationModel,
 )
 
 
-class TeamAssignmentView(BaseView):
+class ExperimentAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
@@ -56,26 +56,33 @@ class TeamAssignmentView(BaseView):
                         {
                             "name": member_info.name,
                             "student_number": member_info.student_number,
+                            "submit": self.get_student_submit(member_info, team, assignment)
                         }
                     )
                 teams_info.append(
                     {
                         "team_id": team.id,
                         "team_name": team.name,
-                        "submit": self.get_team_submit(team),
                         "members": members,
                     }
                 )
 
         return teams_info
 
-    def get_team_submit(self, team):
-        team_file = TeamFileModel.query.filter_by(team_id=team.id).first()
-        if not team_file:
+    def get_student_submit(self, student, team, assignment):
+        experiment_file = ExperimentFileModel.query.filter(db.and_(
+            ExperimentFileModel.student_id == student.id,
+            ExperimentFileModel.team_id == team.id,
+            ExperimentFileModel.assignment_id == assignment.id
+        )).first()
+
+        if experiment_file == None:
             return 0
-        if team_file.is_late == False:
-            return 1
-        return 2
+
+        if experiment_file.is_late == True:
+            return 2
+
+        return 1
 
     def get_evaluation(self, students, assignment_id):
         evaluation_submit = []
@@ -131,7 +138,7 @@ class TeamAssignmentView(BaseView):
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
+        assignments = AssignmentModel.query.filter(AssignmentModel.type == "EXPERIMENT").all()
         students = StudentModel.query.filter(
             StudentModel.student_number.like(student_number_like)
         ).all()
@@ -157,7 +164,7 @@ class TeamAssignmentView(BaseView):
                 }
             )
 
-        return {"team_assignment": assignments}, 200
+        return {"experiment_assignment": assignments}, 200
 
     def get_view(self):
         return self.data_merge()

@@ -24,6 +24,7 @@ def json_type_validate(json_schema: dict):
 
     return decorator
 
+
 POST_ACCOUNT_JSON = {"email": str, "password": str, "name": str}
 DELETE_ACCOUNT_JSON = {"email": str, "password": str}
 POST_AUTH_JSON = {"email": str, "password": str}

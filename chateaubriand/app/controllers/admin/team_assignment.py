@@ -10,6 +10,6 @@ class TeamAssignment(Resource):
     @param_validate(GET_ASSIGNMENT)
     @available_token
     def get(self):
-        team_assignment_view = TeamAssignmentView(request.args.get('class'))
+        team_assignment_view = TeamAssignmentView(request.args.get("class"))
         view = team_assignment_view.get_view()
         return view

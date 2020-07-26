@@ -20,4 +20,5 @@ def param_validate(schema: list):
 
     return decorator
 
+
 GET_ASSIGNMENT = ["class"]
