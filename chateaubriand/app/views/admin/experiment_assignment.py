@@ -14,7 +14,7 @@ from chateaubriand.app.models import (
 )
 
 
-class TeamAssignmentView(BaseView):
+class ExperimentAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
@@ -138,7 +138,7 @@ class TeamAssignmentView(BaseView):
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "TEAM").all()
+        assignments = AssignmentModel.query.filter(AssignmentModel.type == "EXPERIMENT").all()
         students = StudentModel.query.filter(
             StudentModel.student_number.like(student_number_like)
         ).all()
