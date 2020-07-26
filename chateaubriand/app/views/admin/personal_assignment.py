@@ -12,13 +12,17 @@ class PersonalAssignmentView(BaseView):
         self._class = _class
 
     def is_submit(self, assignment_id, student_id):
-        personal_file = PersonalFileModel.query.filter(db.end_(
-            assignment_id == PersonalFileModel.assignment_id,
-            student_id == PersonalFileModel.student_id
-        ))
+        personal_file = PersonalFileModel.query.filter(
+            db.end_(
+                assignment_id == PersonalFileModel.assignment_id,
+                student_id == PersonalFileModel.student_id,
+            )
+        )
 
-        if personal_file is None: return 0
-        if personal_file.is_late == True: return 2
+        if personal_file is None:
+            return 0
+        if personal_file.is_late == True:
+            return 2
         return 1
 
     def deadline(self, assignment):
@@ -36,10 +40,12 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "SINGLE").all()
-        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-
-
+        assignments = AssignmentModel.query.filter(
+            AssignmentModel.type == "SINGLE"
+        ).all()
+        students = StudentModel.query.filter(
+            StudentModel.student_number.like(student_number_like)
+        ).all()
 
         return assignments, students
 
@@ -55,8 +61,9 @@ class PersonalAssignmentView(BaseView):
                     {
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(assignment, student.student_number, exist_assignments)
-
+                        "submit": self.is_submit(
+                            assignment, student.student_number, exist_assignments
+                        ),
                     }
                 )
 

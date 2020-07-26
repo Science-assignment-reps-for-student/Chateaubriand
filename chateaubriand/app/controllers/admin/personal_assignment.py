@@ -5,10 +5,11 @@ from chateaubriand.app.views.admin.personal_assignment import PersonalAssignment
 from chateaubriand.app.util.token_checker import available_token
 from chateaubriand.app.util.param_checker import param_validate, GET_ASSIGNMENT
 
+
 class PersonalAssignment(Resource):
     @param_validate(GET_ASSIGNMENT)
     @available_token
     def get(self):
-        personal_assignment_view = PersonalAssignmentView(request.args.get('class'))
+        personal_assignment_view = PersonalAssignmentView(request.args.get("class"))
         view = personal_assignment_view.get_view()
         return view

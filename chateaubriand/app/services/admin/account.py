@@ -11,12 +11,11 @@ class AccountService:
     @classmethod
     def create_account(cls, email, password, name):
         cls.check_email_format(email)
-        if AdminModel.query.filter_by(email=email).first(): raise Conflict()
+        if AdminModel.query.filter_by(email=email).first():
+            raise Conflict()
 
         account = AdminModel(
-            email=email,
-            password=generate_password_hash(password),
-            name=name
+            email=email, password=generate_password_hash(password), name=name
         )
         db.session.add(account)
         db.session.commit()
@@ -36,5 +35,6 @@ class AccountService:
 
     @classmethod
     def check_email_format(cls, email):
-        email_format = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-        if not email_format.match(email): raise BadRequest
+        email_format = re.compile("^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+        if not email_format.match(email):
+            raise BadRequest
