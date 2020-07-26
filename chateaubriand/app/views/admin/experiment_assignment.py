@@ -8,7 +8,7 @@ from chateaubriand.app.models import (
     StudentModel,
     TeamModel,
     MemberModel,
-    TeamFileModel,
+    ExperimentFileModel,
     SelfEvaluationModel,
     MutualEvaluationModel,
 )
@@ -56,7 +56,7 @@ class TeamAssignmentView(BaseView):
                         {
                             "name": member_info.name,
                             "student_number": member_info.student_number,
-                            "submit": self.get_student_submit(member_info)
+                            "submit": self.get_student_submit(member_info, team, assignment)
                         }
                     )
                 teams_info.append(
@@ -69,9 +69,20 @@ class TeamAssignmentView(BaseView):
 
         return teams_info
 
-    def get_student_submit(self, student):
-        # TODO
-        pass
+    def get_student_submit(self, student, team, assignment):
+        experiment_file = ExperimentFileModel.query.filter(db.and_(
+            ExperimentFileModel.student_id == student.id,
+            ExperimentFileModel.team_id == team.id,
+            ExperimentFileModel.assignment_id == assignment.id
+        )).first()
+
+        if experiment_file == None:
+            return 0
+
+        if experiment_file.is_late == True:
+            return 2
+
+        return 1
 
     def get_evaluation(self, students, assignment_id):
         evaluation_submit = []
@@ -89,7 +100,6 @@ class TeamAssignmentView(BaseView):
         return evaluation_submit
 
     def get_evaluation_submit(self, student, assignment_id):
-        # TODO
         self_evaluation = SelfEvaluationModel.query.filter(
             db.and_(
                 SelfEvaluationModel.assignment_id == assignment_id,
