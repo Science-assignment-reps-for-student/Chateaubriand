@@ -21,7 +21,7 @@ class PersonalAssignmentView(BaseView):
 
         if personal_file == None:
             return 0
-        
+
         if personal_file.is_late == True:
             return 2
         return 1
@@ -62,9 +62,7 @@ class PersonalAssignmentView(BaseView):
                     {
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(
-                            assignment.id, student.student_number
-                        ),
+                        "submit": self.is_submit(assignment.id, student.student_number),
                     }
                 )
 
