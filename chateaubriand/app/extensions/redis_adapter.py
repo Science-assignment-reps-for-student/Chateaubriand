@@ -10,7 +10,7 @@ class RedisAdapter:
             host=app.config["REDIS_HOST"],
             port=app.config["REDIS_PORT"],
             password=app.config["REDIS_PASSWORD"],
-            db=app.config["REDIS_DB"]
+            db=app.config["REDIS_DB"],
         )
 
     def get_redis(self):

@@ -1,5 +1,7 @@
 import time
 
+from chateaubriand.app.extensions import db
+
 from chateaubriand.app.exception import BadRequest
 from chateaubriand.app.views import BaseView
 from chateaubriand.app.models import AssignmentModel, StudentModel, PersonalFileModel
@@ -9,23 +11,29 @@ class PersonalAssignmentView(BaseView):
     def __init__(self, _class):
         self._class = _class
 
-    def is_submit(self, assignment, student_number, exist_assignments):
-        for exist_assignment in exist_assignments:
-            if exist_assignment.id == assignment.id:
-                for single_file in exist_assignment.single_files:
-                    if single_file.student.student_number == student_number:
-                        if single_file.is_late == 1: return 2
-                        else: return 1
-        return 0
+    def is_submit(self, assignment_id, student_id):
+        personal_file = PersonalFileModel.query.filter(
+            db.and_(
+                PersonalFileModel.assignment_id == assignment_id,
+                PersonalFileModel.student_id == student_id,
+            )
+        ).first()
+
+        if personal_file == None:
+            return 0
+        
+        if personal_file.is_late == True:
+            return 2
+        return 1
 
     def deadline(self, assignment):
-        if self._class == 1:
+        if self._class == "1":
             return assignment.deadline_1
-        elif self._class == 2:
+        elif self._class == "2":
             return assignment.deadline_2
-        elif self._class == 3:
+        elif self._class == "3":
             return assignment.deadline_3
-        elif self._class == 4:
+        elif self._class == "4":
             return assignment.deadline_4
         else:
             raise BadRequest
@@ -33,23 +41,20 @@ class PersonalAssignmentView(BaseView):
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
 
-        exist_assignments = AssignmentModel.query\
-            .join(PersonalFileModel)\
-            .join(StudentModel)\
-            .filter(StudentModel.student_number.like(student_number_like))\
-            .filter(AssignmentModel.type == "SINGLE")\
-            .all()
+        assignments = AssignmentModel.query.filter(
+            AssignmentModel.type == "PERSONAL"
+        ).all()
+        students = StudentModel.query.filter(
+            StudentModel.student_number.like(student_number_like)
+        ).all()
 
-        students = StudentModel.query.filter(StudentModel.student_number.like(student_number_like)).all()
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "SINGLE").all()
-
-        return exist_assignments, students, assignments
+        return assignments, students
 
     def data_merge(self):
-        exist_assignments, students, assignments = self.query_to_db()
-        assignments = []
+        assignments_model, students = self.query_to_db()
+        assignments = list()
 
-        for assignment in assignments:
+        for assignment in assignments_model:
             class_submit = []
 
             for student in students:
@@ -57,8 +62,9 @@ class PersonalAssignmentView(BaseView):
                     {
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(assignment, student.student_number, exist_assignments)
-
+                        "submit": self.is_submit(
+                            assignment.id, student.student_number
+                        ),
                     }
                 )
 

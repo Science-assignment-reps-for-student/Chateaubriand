@@ -26,5 +26,6 @@ class AuthService:
 
     @classmethod
     def check_email_format(cls, email):
-        email_format = re.compile('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-        if not email_format.match(email): raise BadRequest
+        email_format = re.compile("^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+        if not email_format.match(email):
+            raise BadRequest

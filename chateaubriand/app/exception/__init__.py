@@ -38,9 +38,11 @@ class ViewError(BaseServerException):
     # description = "View Error"
     pass
 
+
 class ControllerError(BaseServerException):
     # description = "Controller Error"
     pass
+
 
 class ServiceError(BaseServerException):
     # description = "Service Error"
