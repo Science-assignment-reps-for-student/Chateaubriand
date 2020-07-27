@@ -34,8 +34,4 @@ def generate_refresh_token(email):
 
 
 def decode_token(token):
-    try:
-        email = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["sub"]
-        return email
-    except:
-        AuthenticateFailed()
+    return jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY, verify=False)["sub"]
