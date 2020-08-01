@@ -10,5 +10,5 @@ class TokenService:
         email = decode_token(access_token)
         saved_refresh_token = redis_db.get(email)
         if not refresh_token == saved_refresh_token.decode():
-            raise Unauthorized
+            raise Unauthorized()
         return email

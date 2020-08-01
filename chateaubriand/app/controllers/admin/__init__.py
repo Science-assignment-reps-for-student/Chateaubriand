@@ -3,7 +3,9 @@ from flask_restful import Api
 
 from chateaubriand.app.controllers.admin.personal_assignment import PersonalAssignment
 from chateaubriand.app.controllers.admin.team_assignment import TeamAssignment
-from chateaubriand.app.controllers.admin.experiment_assignment import ExperimentAssignment
+from chateaubriand.app.controllers.admin.experiment_assignment import (
+    ExperimentAssignment,
+)
 from chateaubriand.app.controllers.admin.account import Account
 from chateaubriand.app.controllers.admin.auth import Auth
 from chateaubriand.app.controllers.admin.token import Token

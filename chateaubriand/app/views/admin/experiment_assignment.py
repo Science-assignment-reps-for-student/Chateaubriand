@@ -56,25 +56,25 @@ class ExperimentAssignmentView(BaseView):
                         {
                             "name": member_info.name,
                             "student_number": member_info.student_number,
-                            "submit": self.get_student_submit(member_info, team, assignment)
+                            "submit": self.get_student_submit(
+                                member_info, team, assignment
+                            ),
                         }
                     )
                 teams_info.append(
-                    {
-                        "team_id": team.id,
-                        "team_name": team.name,
-                        "members": members,
-                    }
+                    {"team_id": team.id, "team_name": team.name, "members": members,}
                 )
 
         return teams_info
 
     def get_student_submit(self, student, team, assignment):
-        experiment_file = ExperimentFileModel.query.filter(db.and_(
-            ExperimentFileModel.student_id == student.id,
-            ExperimentFileModel.team_id == team.id,
-            ExperimentFileModel.assignment_id == assignment.id
-        )).first()
+        experiment_file = ExperimentFileModel.query.filter(
+            db.and_(
+                ExperimentFileModel.student_id == student.id,
+                ExperimentFileModel.team_id == team.id,
+                ExperimentFileModel.assignment_id == assignment.id,
+            )
+        ).first()
 
         if experiment_file == None:
             return 0
@@ -138,7 +138,9 @@ class ExperimentAssignmentView(BaseView):
 
     def query_to_db(self):
         student_number_like = "_{}__".format(self._class)
-        assignments = AssignmentModel.query.filter(AssignmentModel.type == "EXPERIMENT").all()
+        assignments = AssignmentModel.query.filter(
+            AssignmentModel.type == "EXPERIMENT"
+        ).all()
         students = StudentModel.query.filter(
             StudentModel.student_number.like(student_number_like)
         ).all()

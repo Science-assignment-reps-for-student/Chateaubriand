@@ -2,6 +2,7 @@ import jwt
 import time
 
 from chateaubriand.config.app_config import ProductionLevelAppConfig
+from chateaubriand.app.exception import AuthenticateFailed
 
 
 def generate_token(email, token_type, expire_time):
@@ -33,5 +34,4 @@ def generate_refresh_token(email):
 
 
 def decode_token(token):
-    email = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["sub"]
-    return email
+    return jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY, verify=False)["sub"]
