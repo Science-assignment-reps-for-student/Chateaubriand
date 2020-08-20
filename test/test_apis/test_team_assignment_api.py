@@ -13,11 +13,11 @@ class TeamAssignmentTestCase(BaseTestCase):
         self.invalid_get = {"class": "1"}
 
         self.common_header = {
-            "Authorization": jwt_mock(self.app, "ADMIN", "access_token")
+            "Authorization": jwt_mock(self.app, "ADMIN", "access_token", bearer=True)
         }
 
         self.invalid_header = {
-            "Authorization": jwt_mock(self.app, "STUDENT", "access_token")
+            "Authorization": jwt_mock(self.app, "STUDENT", "access_token", bearer=True)
         }
 
     def test_get(self):

@@ -25,7 +25,7 @@ class AccountTestCase(BaseTestCase):
         self.invalid_body_delete = {"email": 1, "password": 1}
 
         self.common_header = {
-            "Authorization": jwt_mock(self.app, "ADMIN", "access_token")
+            "Authorization": jwt_mock(self.app, "ADMIN", "access_token", bearer=True)
         }
 
         self.test_client.post(self.path, json=self.duplicate_body_post)
@@ -50,7 +50,9 @@ class AccountTestCase(BaseTestCase):
             self.path, json=self.invalid_body_delete, headers=self.common_header
         )
 
-        resp_401 = self.test_client.delete(self.path, json=self.common_body_delete)
+        resp_401 = self.test_client.delete(
+            self.path, json=self.common_body_delete
+        )
 
         self.assertEqual(resp_200.status_code, 200)
         self.assertEqual(resp_400.status_code, 400)
