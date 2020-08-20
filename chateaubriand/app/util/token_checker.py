@@ -16,11 +16,11 @@ def available_token(fn):
             raise AuthenticateFailed()
 
         try:
-            type = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["authority"]
+            type_ = jwt.decode(token, ProductionLevelAppConfig.SECRET_KEY)["authority"]
         except:
             raise AuthenticateFailed()
 
-        if not type == "ADMIN":
+        if not type_ == "ADMIN":
             raise Unauthorized()
 
         return fn(*args, **kwargs)
