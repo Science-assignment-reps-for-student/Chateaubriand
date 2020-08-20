@@ -5,13 +5,13 @@ import datetime
 class DefaultAppConfig:
     ENV = "development"
     DEBUG = True
-    SECRET_KEY = ""
+    SECRET_KEY = "temporarysecretkey"
     ACCESS_TOKEN_EXPIRE_TIME = datetime.timedelta(minutes=10)
     REFRESH_TOKEN_EXPIRE_TIME = datetime.timedelta(days=14)
 
 
 class DevLevelAppConfig(DefaultAppConfig):
-    SECRET_KEY = "temporarysecretkey"
+    pass
 
 
 class ProductionLevelAppConfig(DefaultAppConfig):
