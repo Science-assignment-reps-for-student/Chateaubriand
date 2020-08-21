@@ -14,11 +14,11 @@ class AccountTestCase(BaseTestCase):
 
         self.common_body_post = {
             "email": "test@test.test",
-            "password": "test",
+            "password": "password",
             "name": "테스트",
         }
 
-        self.common_body_delete = self.common_body_post
+        self.common_body_delete = {"email": "test@test.test", "password": "password"}
 
         self.invalid_body_post = {"email": 1, "password": 1}
 
@@ -30,6 +30,11 @@ class AccountTestCase(BaseTestCase):
 
         self.test_client.post(self.path, json=self.duplicate_body_post)
 
+
+    def tearDown(self):
+        self.test_client.delete(self.path, json=self.common_body_delete, headers=self.common_header)
+
+
     def test_post(self):
         resp_201 = self.test_client.post(self.path, json=self.common_body_post)
 
@@ -40,6 +45,7 @@ class AccountTestCase(BaseTestCase):
         self.assertEqual(resp_201.status_code, 201)
         self.assertEqual(resp_400.status_code, 400)
         self.assertEqual(resp_409.status_code, 409)
+
 
     def test_delete(self):
         self.test_client.post(self.path, json=self.common_body_post)
