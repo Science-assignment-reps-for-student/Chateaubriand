@@ -28,14 +28,14 @@ class AccountTestCase(BaseTestCase):
             "Authorization": jwt_mock(self.app, "ADMIN", "access_token", bearer=True)
         }
 
-        self.test_client.post(self.path, json=self.duplicate_body_post)
-
 
     def tearDown(self):
         self.test_client.delete(self.path, json=self.common_body_delete, headers=self.common_header)
 
 
     def test_post(self):
+        self.test_client.post(self.path, json=self.duplicate_body_post)
+
         resp_201 = self.test_client.post(self.path, json=self.common_body_post)
 
         resp_400 = self.test_client.post(self.path, json=self.invalid_body_post)
