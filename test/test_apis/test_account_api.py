@@ -13,12 +13,12 @@ class AccountTestCase(BaseTestCase):
         }
 
         self.common_body_post = {
-            "email": "test@test.com",
+            "email": "test@test.test",
             "password": "test",
             "name": "테스트",
         }
 
-        self.common_body_delete = {"email": "test@test.com", "password": "test"}
+        self.common_body_delete = self.common_body_post
 
         self.invalid_body_post = {"email": 1, "password": 1}
 
@@ -42,6 +42,8 @@ class AccountTestCase(BaseTestCase):
         self.assertEqual(resp_409.status_code, 409)
 
     def test_delete(self):
+        self.test_client.post(self.path, json=self.common_body_post)
+
         resp_200 = self.test_client.delete(
             self.path, json=self.common_body_delete, headers=self.common_header,
         )

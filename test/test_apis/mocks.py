@@ -8,6 +8,7 @@ def payload_builder(payload, user_type, token_type, invalid):
         payload["sub"] = 2
     payload["type"] = token_type
     payload["authority"] = user_type
+    payload["sub"] = "test@test.test"
     return payload
 
 
