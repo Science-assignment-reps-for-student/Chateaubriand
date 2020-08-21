@@ -1,22 +1,30 @@
 from test import BaseTestCase
+from test.test_apis.mocks import jwt_mock
 
 
 class AuthTestCase(BaseTestCase):
     def setUp(self):
         super().setUp()
         self.path = "/admin/auth"
-        self.common_body_post = {"email": "test@test.com", "password": "password"}
+        self.common_body_post = {"email": "test@test.test", "password": "password"}
 
         self.invalid_body_post = {"email": 123}
 
         self.invalid_info_body_post = {
-            "email": "test@test.com",
+            "email": "test@test.test",
             "password": "wrong_password",
         }
 
         self.test_client.post(
             "admin/account",
-            json={"email": "test@test.com", "password": "password", "name": "테스트",},
+            json={"email": "test@test.test", "password": "password", "name": "테스트"}
+        )
+
+    def tearDown(self):
+        self.test_client.delete(
+            "admin/account",
+            json={"email": "test@test.test", "password": "password"},
+            headers={"Authorization": jwt_mock(self.app, "ADMIN", "access_token", bearer=True)}
         )
 
     def test_post(self):
