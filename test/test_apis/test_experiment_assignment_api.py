@@ -17,11 +17,11 @@ class ExperimentAssignmentTestCase(BaseTestCase):
 
     def test_get(self):
         resp_200 = self.test_client.get(
-            self.path, json=self.common_get, headers=self.common_header
+            self.path, headers=self.common_header
         )
 
         resp_403 = self.test_client.get(
-            self.path, json=self.common_get, headers=self.invalid_header,
+            self.path, headers=self.invalid_header,
         )
 
         self.assertEqual(resp_200.status_code, 200)
