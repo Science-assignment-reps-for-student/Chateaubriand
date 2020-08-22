@@ -11,13 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      TEST_DATABASE_USERNAME: ${{ secrets.TEST_DATABASE_USERNAME }}
-      TEST_DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-      TEST_DATABASE_HOST: ${{ secrets.TEST_DATABASE_HOST}}
-      TEST_REDIS_HOST: ${{ secrets.TEST_REDIS_HOST }}
-      TEST_REDIS_PORT: ${{ secrets.TEST_REDIS_PORT }}
-      TEST_REDIS_PASSWORD: ${{ secrets.TEST_REDIS_PASSWORD }}
-      TEST_REDIS_DB: ${{ secrets.TEST_REDIS_DB }}
     steps:
       - uses: actions/checkout@v2
         
@@ -53,15 +46,14 @@ jobs:
       REDIS_DB: ${{ secrets.REDIS_DB }}
     steps:
       - uses: actions/checkout@v2
-        
+
       - name: build docker image
-        run: docker build -t chateaubriand
-      
-      - name: publish
+        run: docker build -t migsking/chateaubriand .
+
+      - name: publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: chateaubriand
+          name: migsking/chateaubriand
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          registry: ${{ secrets.DOCKER_REGISTRY }}
      
