@@ -7,6 +7,9 @@ class AuthView(BaseView):
     def __init__(self, email):
         self._email = email
 
+    def get_access_token(self):
+        return generate_access_token(self._email)
+
     def get_refresh_token(self):
         redis_db = redis.get_redis()
         return redis_db.get(self._email).decode()
@@ -14,10 +17,10 @@ class AuthView(BaseView):
     def data_merge(self):
         return (
             {
-                "access_token": generate_access_token(self._email),
+                "access_token": self.get_access_token(),
                 "refresh_token": self.get_refresh_token(),
             },
-            200,
+            200
         )
 
     def get_view(self):
