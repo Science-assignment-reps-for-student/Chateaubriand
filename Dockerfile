@@ -4,6 +4,7 @@ MAINTAINER mallycrip "migsking@naver.com"
 COPY . .
 WORKDIR .
 
+RUN mkdir logs
 RUN pip install -r requirements.txt
 
 ENTRYPOINT ["python"]
