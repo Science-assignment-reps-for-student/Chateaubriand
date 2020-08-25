@@ -16,7 +16,6 @@ def register_controllers(app: Flask):
 def register_extensions(app: Flask):
     extensions.cors.init_app(app)
     extensions.db.init_app(app)
-    extensions.jwt.init_app(app)
     extensions.redis.init_app(app)
 
 
@@ -26,8 +25,8 @@ def create_app(*config_cls) -> Flask:
     for config in config_cls:
         app.config.from_object(config)
 
+    register_extensions(app)
     register_hooks(app)
     register_controllers(app)
-    register_extensions(app)
 
     return app
