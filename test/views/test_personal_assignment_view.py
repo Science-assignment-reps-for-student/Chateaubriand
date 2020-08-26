@@ -17,7 +17,7 @@ class TestPersonalView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "content": "test",
+                        "description": "test",
                         "created_at": 10000000,
                         "deadline": 10000000,
                         "class_submit": [],
@@ -36,7 +36,7 @@ class TestPersonalView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "content": "test",
+                        "description": "test",
                         "created_at": 10000000,
                         "deadline": 10000000,
                         "class_submit": [],

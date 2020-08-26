@@ -17,7 +17,7 @@ class TestExperimentView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "content": "test",
+                        "description": "test",
                         "created_at": 100000000,
                         "deadline": 100000000,
                         "peer_evaluation_submit": [],
@@ -37,7 +37,7 @@ class TestExperimentView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "content": "test",
+                        "description": "test",
                         "created_at": 100000000,
                         "deadline": 100000000,
                         "peer_evaluation_submit": [],
