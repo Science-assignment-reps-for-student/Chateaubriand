@@ -10,7 +10,7 @@ class AssignmentModel(db.Model):
     deadline_3 = db.Column(db.DateTime, nullable=False)
     deadline_4 = db.Column(db.DateTime, nullable=False)
     title = db.Column(db.String, nullable=False)
-    content = db.Column(db.String)
+    description = db.Column(db.String)
     type = db.Column(db.Enum("PERSONAL", "TEAM", "EXPERIMENT"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     view = db.Column(db.Integer)
