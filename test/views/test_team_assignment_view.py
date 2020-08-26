@@ -17,11 +17,12 @@ class TestTeamView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "description": "test",
+                        "content": "test",
                         "created_at": 10000000,
                         "deadline": 100000000,
                         "peer_evaluation_submit": [],
-                        "teams_info": []
+                        "teams_info": [],
+                        "view": 0
                     }
                 ]
             }, 200
@@ -36,11 +37,12 @@ class TestTeamView(BaseTestCase):
                     {
                         "id": 1,
                         "title": "test",
-                        "description": "test",
+                        "content": "test",
                         "created_at": 10000000,
                         "deadline": 100000000,
                         "peer_evaluation_submit": [],
-                        "teams_info": []
+                        "teams_info": [],
+                        "view": 0
                     }
                 ]
             }, 200
