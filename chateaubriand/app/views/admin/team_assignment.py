@@ -149,7 +149,7 @@ class TeamAssignmentView(BaseView):
                 {
                     "id": assignment.id,
                     "title": assignment.title,
-                    "content": assignment.content,
+                    "description": assignment.description,
                     "created_at": time.mktime(assignment.created_at.timetuple()),
                     "deadline": time.mktime(self.deadline(assignment).timetuple()),
                     "peer_evaluation_submit": peer_evaluation_submit,

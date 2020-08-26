@@ -70,7 +70,7 @@ class PersonalAssignmentView(BaseView):
                 {
                     "id": assignment.id,
                     "title": assignment.title,
-                    "description": assignment.content,
+                    "description": assignment.description,
                     "created_at": time.mktime(assignment.created_at.timetuple()),
                     "deadline": time.mktime(self.deadline(assignment).timetuple()),
                     "class_submit": class_submit,
