@@ -10,7 +10,7 @@ from chateaubriand.app.models import (
     MemberModel,
     TeamFileModel,
     SelfEvaluationModel,
-    MutualEvaluationModel,
+    TeamEvaluationModel,
 )
 
 
@@ -116,10 +116,10 @@ class TeamAssignmentView(BaseView):
         if (
             len(team.members)
             == len(
-                MutualEvaluationModel.query.filter(
+                TeamEvaluationModel.query.filter(
                     db.and_(
-                        MutualEvaluationModel.student_id == student.id,
-                        MutualEvaluationModel.assignment_id == assignment_id,
+                        TeamEvaluationModel.student_id == student.id,
+                        TeamEvaluationModel.assignment_id == assignment_id,
                     )
                 ).all()
             )

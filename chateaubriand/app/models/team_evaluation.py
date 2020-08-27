@@ -1,7 +1,7 @@
 from chateaubriand.app.extensions import db
 
 
-class MutualEvaluationModel(db.Model):
+class TeamEvaluationModel(db.Model):
     __tablename__ = "team_evaluation"
 
     id = db.Column(db.Integer, primary_key=True)

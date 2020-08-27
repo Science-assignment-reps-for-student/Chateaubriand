@@ -10,5 +10,5 @@ from chateaubriand.app.models.admin import AdminModel
 from chateaubriand.app.models.member import MemberModel
 from chateaubriand.app.models.team import TeamModel
 
-from chateaubriand.app.models.team_evaluation import MutualEvaluationModel
-from chateaubriand.app.models.personal_evaluation import SelfEvaluationModel
+from chateaubriand.app.models.team_evaluation import TeamEvaluationModel
+from chateaubriand.app.models.self_evaluation import SelfEvaluationModel
