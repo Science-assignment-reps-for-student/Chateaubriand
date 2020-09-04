@@ -60,6 +60,7 @@ class PersonalAssignmentView(BaseView):
             for student in students:
                 class_submit.append(
                     {
+                        "student_id": student.id,
                         "name": student.name,
                         "student_number": student.student_number,
                         "submit": self.is_submit(assignment.id, student.student_number),
