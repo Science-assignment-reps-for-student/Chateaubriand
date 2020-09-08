@@ -19,8 +19,6 @@ class PersonalAssignmentView(BaseView):
             )
         ).first()
 
-        print(assignment_id, student_id)
-
         if personal_file == None:
             return 0
 
