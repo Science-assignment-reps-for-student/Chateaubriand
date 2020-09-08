@@ -19,6 +19,8 @@ class PersonalAssignmentView(BaseView):
             )
         ).first()
 
+        print(assignment_id, student_id)
+
         if personal_file == None:
             return 0
 
@@ -63,7 +65,7 @@ class PersonalAssignmentView(BaseView):
                         "student_id": student.id,
                         "name": student.name,
                         "student_number": student.student_number,
-                        "submit": self.is_submit(assignment.id, student.student_number),
+                        "submit": self.is_submit(assignment.id, student.id),
                     }
                 )
 
